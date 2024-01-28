@@ -14,7 +14,7 @@ pipeline{
 
                 script{
                  
-                 git branch: 'main', url: 'https://github.com/rameshkumarvermagithub/Counter_application.git'
+                 git branch: 'master', url: 'https://github.com/rameshkumarvermagithub/spock-lizard-docker.git'
 
                 }
             }
@@ -76,54 +76,27 @@ pipeline{
                 }
              }
         }
-        // stage('Docker image Building'){
-
-        //      steps{
-
-        //       script{
-                   
-        //           sh 'docker image build -t $JOB_NAME:v1.$BUILD_ID .'
-        //           sh 'docker image tag $JOB_NAME:v1.$BUILD_ID rameshkumarverma/$JOB_NAME:v1.$BUILD_ID'
-        //           sh 'docker image tag $JOB_NAME:v1.$BUILD_ID rameshkumarverma/$JOB_NAME:latest'
-
-        //         }
-        //      }
-        // }
-        // stage('Docker image push'){
-
-        //      steps{
-
-        //       script{
-        //           withCredentials([string(credentialsId: 'docker', variable: 'docker')]) {
-                     
-        //              sh 'docker login -u rameshkumarverma -p ${docker}'
-        //              sh 'docker image push rameshkumarverma/$JOB_NAME:v1.$BUILD_ID'
-        //              sh 'docker image push rameshkumarverma/$JOB_NAME:latest'
-        //           }
-        //         }
-        //      }
-        // }
         
         stage('Docker Build & Push') {
             steps {
                 script{
                     withDockerRegistry(credentialsId: 'docker', toolName: 'docker') {
                         
-                        sh "docker build -t rameshkumarverma/counter-app ."
-                        // sh "docker tag  elart rameshkumarverma/ekart:latest"
-                        sh "docker push rameshkumarverma/counter-app:latest"
+                        sh "docker build -t rameshkumarverma/spock-lizard-docker ."
+                        // sh "docker tag  spock-lizard-docker rameshkumarverma/spock-lizard-docker:latest"
+                        sh "docker push rameshkumarverma/spock-lizard-docker:latest"
                     }
                 }
             }
         }
         stage("TRIVY"){
             steps{
-                sh "trivy image rameshkumarverma/counter-app:latest > trivyimage.txt"
+                sh "trivy image rameshkumarverma/spock-lizard-docker:latest > trivyimage.txt"
             }
         }
         // stage("deploy_docker"){
         //     steps{
-        //         sh "docker run -d --name ekart -p 8070:8070 rameshkumarverma/ekart:latest"
+        //         sh "docker run -d --name spock-lizard-docker -p 80:80 rameshkumarverma/spock-lizard-docker:latest"
         //     }
         // }
 
