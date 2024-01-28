@@ -94,24 +94,24 @@ pipeline{
                 sh "trivy image rameshkumarverma/spock-lizard-docker:latest > trivyimage.txt"
             }
         }
-        // stage("deploy_docker"){
-        //     steps{
-        //         sh "docker run -d --name spock-lizard-docker -p 80:80 rameshkumarverma/spock-lizard-docker:latest"
-        //     }
-        // }
-
-        stage('Deploy to kubernets'){
+        stage("deploy_docker"){
             steps{
-                script{
-                    // dir('K8S') {
-                        withKubeConfig(caCertificate: '', clusterName: '', contextName: '', credentialsId: 'k8s', namespace: '', restrictKubeConfigAccess: false, serverUrl: '') {
-                                sh 'kubectl apply -f deployment-service.yml'
-                                // sh 'kubectl apply -f service.yml'
-                        }
-                    // }
-                }
+                sh "docker run -d --name spock-lizard-docker -p 8080:8080 rameshkumarverma/spock-lizard-docker:latest"
             }
         }
+
+        // stage('Deploy to kubernets'){
+        //     steps{
+        //         script{
+        //             // dir('K8S') {
+        //                 withKubeConfig(caCertificate: '', clusterName: '', contextName: '', credentialsId: 'k8s', namespace: '', restrictKubeConfigAccess: false, serverUrl: '') {
+        //                         sh 'kubectl apply -f deployment-service.yml'
+        //                         // sh 'kubectl apply -f service.yml'
+        //                 }
+        //             // }
+        //         }
+        //     }
+        // }
 
     }
 }
